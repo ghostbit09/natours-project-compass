@@ -56,13 +56,4 @@ router
     tourController.deleteTour
   );
 
-//Rutas anidadas
-// router
-//   .route('/:tourId/reviews')
-//   .post(
-//     authController.protect,
-//     authController.restrictTo('user'),
-//     reviewController.createReview
-//   );
-
 module.exports = router;

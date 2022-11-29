@@ -83,20 +83,6 @@ app.use('/api/v1/bookings', bookingRouter);
 //Si no tomo alguna de las rutas de arriba, quiere decir que la ruta ingresada
 //no esta bien y se retorna un mensaje de error
 app.all('*', (req, res, next) => {
-  // res.status(404).json({
-  //   status: 'fail',
-  //   message: `can't find ${req.originalUrl} on this server!`
-  // });
-
-  //Con el middleware para manejo de errores
-  // const err = new Error(`can't find ${req.originalUrl} on this server!`);
-  // err.status = 'fail';
-  // err.statusCode = 404;
-
-  //Se le manda el parametro err para que en los siguientes middlewares
-  //se asuma que hay un error y asi se omitan
-  // next(err);
-
   //Con el objeto de appError
   next(new AppError(`can't find ${req.originalUrl} on this server!`, 404));
 });

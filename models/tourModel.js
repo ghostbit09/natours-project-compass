@@ -13,7 +13,6 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       maxlength: [40, 'A tour name must have less or equal then 40 characters'],
       minlength: [10, 'A tour name must have more or equal then 10 characters']
-      // validate: [validator.isAlpha, 'Tour name must only contain characters']
     },
     slug: String,
     duration: {
@@ -157,27 +156,6 @@ tourSchema.pre('save', function(next) {
   next();
 });
 
-//Si queremos hacer incrustacion de los datos, se debe hacer esto
-// tourSchema.pre('save', async function(next) {
-//   //Debido a que el arreglo se llena de promesas, se deben resolver
-//   //para obtener los documentos (datos) de los guias de los recorridos (tours)
-//   const guidesPromises = this.guides.map(async id => await User.findById(id));
-//   this.guides = await Promise.all(guidesPromises);
-//   next();
-// });
-
-// tourSchema.pre('save', function(next) {
-//   console.log('Will save document...');
-//   next();
-// });
-
-//Este se ejecuta despues de guardar un documento o
-//dato en la BD, los post y pre funcionan como disparadores
-// tourSchema.post('save', function(doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
 //Query middleware
 //^find para que encuentre todos los comandos que empiezan por
 //find (find y findOne)
@@ -200,35 +178,6 @@ tourSchema.pre(/^find/, function(next) {
   next();
 });
 
-// tourSchema.post(/^find/, function(docs, next) {
-//   console.log(`Query took ${Date.now() - this.start} millisenconds!`);
-//   next();
-// });
-
-//Aggregation middleware
-// tourSchema.pre('aggregate', function(next) {
-//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-
-//   console.log(this.pipeline());
-//   next();
-// });
-
 const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour;
-
-//Se crea un objeto a partir del esquema
-// const testTour = new Tour({
-//   name: 'The forest hiker',
-//   rating: 4.7,
-//   price: 497
-// });
-
-// testTour
-//   .save()
-//   .then(doc => {
-//     console.log(doc);
-//   })
-//   .catch(err => {
-//     console.log('ERROR:', err);
-//   });

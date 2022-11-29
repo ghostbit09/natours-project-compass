@@ -7647,11 +7647,10 @@ var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
 const login = async (email, password)=>{
-    console.log(email, password);
     try {
         const res = await (0, _axiosDefault.default)({
             method: "POST",
-            url: "http://127.0.0.1:3000/api/v1/users/login",
+            url: "/api/v1/users/login",
             data: {
                 email,
                 password
@@ -7673,7 +7672,7 @@ const logout = async ()=>{
     try {
         const res = await (0, _axiosDefault.default)({
             method: "GET",
-            url: "http://127.0.0.1:3000/api/v1/users/logout"
+            url: "/api/v1/users/logout"
         });
         res.data.status = "success";
         location.reload(true);
@@ -11759,7 +11758,7 @@ var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
 const updateSettings = async (data, type)=>{
     try {
-        const url = type === "password" ? "http://127.0.0.1:3000/api/v1/users/updateMyPassword" : "http://127.0.0.1:3000/api/v1/users/updateMe";
+        const url = type === "password" ? "/api/v1/users/updateMyPassword" : "/api/v1/users/updateMe";
         const res = await (0, _axiosDefault.default)({
             method: "PATCH",
             url,
@@ -11779,20 +11778,12 @@ var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
 const bookTour = async (tourId)=>{
-    //Para manejo de pagos
-    //Esto ya no funciona en la nueva version de Stripe
-    // const stripe = Stripe('pk_test_51M8qT4IINvTlJFxBtsV8scZcnRirZoQJgKj7L3e6KgNTdPW8BwVAOkasWvOAO6LlkGQ6GKJU9iYfr32w2tBKxcSl00gJJMje0m');
     try {
         //1. Obtenemos la checkout session de la API
-        const session = await (0, _axiosDefault.default)(`http://127.0.0.1:3000/api/v1/bookings/checkout-session/${tourId}`);
-        //2. Creamos el checkout form y cargamos la tarjeta de credito
-        //Esto ya no funciona en la nueva version de Stripe
-        // await stripe.redirectToCheckout({
-        //     sessionId: session.data.session.id
-        // });
+        const session = await (0, _axiosDefault.default)(`/api/v1/bookings/checkout-session/${tourId}`);
+        //2. Creamos el checkout form y cargamos el form para ingresar la tarjeta de credito
         window.location.replace(session.data.session.url);
     } catch (err) {
-        console.log(err);
         (0, _alerts.showAlert)("error", err);
     }
 };

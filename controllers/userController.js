@@ -5,20 +5,6 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const factory = require('./handlerFactory');
 
-//Para almacenar las imagenes en disco
-// cb = callback
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'public/img/users');
-//   },
-//   filename: (req, file, cb) => {
-//     //Para tomar la extension del archivo
-//     const ext = file.mimetype.split('/')[1];
-//     //Si no hay errores, crea el archivo con su nombre y extension
-//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-//   }
-// });
-
 //Para almacenar las imagenes en memoria
 const multerStorage = multer.memoryStorage();
 
@@ -69,18 +55,6 @@ exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
-
-// exports.getAllUsers = catchAsync(async (req, res, next) => {
-//   const users = await User.find();
-
-//   res.status(200).json({
-//     status: 'success',
-//     results: users.length,
-//     data: {
-//       users
-//     }
-//   });
-// });
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   //1. Se crea un error si el usuario ingreso los datos de la contraseña
