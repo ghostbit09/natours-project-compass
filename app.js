@@ -7,6 +7,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -25,6 +27,12 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) MIDDLEWARES GLOBALES
+//Implementacion de cors (Para que las consultas a la API funcionen desde el navegador)
+app.use(cors());
+
+//Para habilitar cors en todas las rutas de la API
+app.options('*', cors());
+
 //Definicion de los archivos estaticos
 app.use(express.static(`${__dirname}/public`));
 //Se configuran unos HTTP headers de seguridad
@@ -68,6 +76,9 @@ app.use(
     ]
   })
 );
+
+//Para comprimir el texto (Para el despligue)
+app.use(compression());
 
 //Test middleware
 app.use((req, res, next) => {
