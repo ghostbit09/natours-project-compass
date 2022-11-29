@@ -18,6 +18,8 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
+app.enable('trust proxy');
+
 //Motor de plantillas que se usara para el frontend
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));

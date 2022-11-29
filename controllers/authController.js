@@ -12,18 +12,19 @@ const signToken = id => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
-  const cookieOptions = {
+
+  // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  //Se modifico para Heroku
+  res.cookie('jwt', token, {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true
-  };
-
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-
-  res.cookie('jwt', token, cookieOptions);
+    httpOnly: true,
+    secure: req.secure || req.get('x-forwarded-proto') === 'https'
+  });
 
   //Removemos la contraseña del output para que no se pueda ver
   user.password = undefined;
@@ -63,7 +64,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   //3. Si todo sale bien, se envia el token al cliente
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.logout = (req, res) => {
@@ -231,7 +232,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   //3. Se actualiza la propiedad changePasswordAt para el usuario
   //esto se hace con un pre en el userModel
   //4. Logeamos al usuario y se envia el JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -248,5 +249,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
 
   //4. Iniciamos la sesion del usuario, enviando el JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
